@@ -1,0 +1,57 @@
+# --- SHAPES ---
+@prefix ex: <http://example.org/payments#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:MidPeriodIneligibleClaimant a sh:NodeShape ;
+  sh:property [
+    sh:path ex:eligibilityEnded ;
+    sh:hasValue true ;
+  ] ;
+  sh:property [
+    sh:path ex:periodEnded ;
+    sh:hasValue false ;
+  ] .
+
+ex:PaymentActionShape a sh:NodeShape ;
+  sh:targetClass ex:PaymentAction ;
+  sh:property [
+    sh:path ex:subjectDuty ;
+    sh:minCount 1 ;
+    sh:node ex:DutySafeToPay ;
+    sh:message "Payment duty still marked active for a period after eligibility ended on day 12. Flagging before payment is sent." ;
+  ] .
+
+ex:DutySafeToPay a sh:NodeShape ;
+  sh:not [
+    sh:and [
+      sh:property [
+        sh:path ex:dutyStatus ;
+        sh:hasValue "active" ;
+      ] ;
+      sh:property [
+        sh:path ex:claimant ;
+        sh:minCount 1 ;
+        sh:node ex:MidPeriodIneligibleClaimant ;
+      ] ;
+    ]
+  ] ;
+  sh:message "Payment duty still marked active for a period after eligibility ended on day 12. Flagging before payment is sent." .
+
+# --- DATA ---
+@prefix ex: <http://example.org/payments#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:pay2291 a ex:PaymentAction ;
+  ex:subjectDuty ex:duty2291 .
+
+ex:duty2291 a ex:PaymentDuty ;
+  ex:dutyStatus "active" ;
+  ex:claimant ex:claimant2291 .
+
+ex:claimant2291 a ex:Claimant ;
+  ex:claimId "JD-2291" ;
+  ex:eligibilityEndDay 12 ;
+  ex:periodLengthDays 30 ;
+  ex:eligibilityEnded true ;
+  ex:periodEnded false .

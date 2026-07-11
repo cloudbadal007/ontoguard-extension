@@ -1,0 +1,25 @@
+# --- SHAPES ---
+@prefix ex: <http://example.org/claims#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+ex:EligibleMustApproveShape a sh:NodeShape ;
+  sh:targetClass ex:EligibleClaim ;
+  sh:property [
+    sh:path ex:decision ;
+    sh:hasValue ex:Approved ;
+  ] .
+
+ex:FraudHoldNoApproveShape a sh:NodeShape ;
+  sh:targetClass ex:FraudHoldClaim ;
+  sh:property [
+    sh:path ex:decision ;
+    sh:hasValue ex:Denied ;
+    sh:message "Cannot approve — claimant is under fraud hold, but eligibility rule also requires approval. Conflicting rules detected." ;
+  ] .
+
+# --- DATA ---
+@prefix ex: <http://example.org/claims#> .
+
+ex:claim2291 a ex:Claim, ex:EligibleClaim, ex:FraudHoldClaim ;
+  ex:claimId "JD-2291" ;
+  ex:decision ex:Approved .

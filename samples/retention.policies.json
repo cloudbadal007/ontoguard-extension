@@ -1,0 +1,24 @@
+[
+  {
+    "id": "ret-1",
+    "kind": "must",
+    "subject": "customer records",
+    "action": "be retained",
+    "when": "they are created",
+    "until": "seven years have passed"
+  },
+  {
+    "id": "ret-2",
+    "kind": "must_not",
+    "subject": "customer records",
+    "action": "be retained",
+    "when": "thirty days have passed since creation"
+  },
+  {
+    "id": "ret-3",
+    "kind": "must",
+    "subject": "customer records",
+    "action": "be purged",
+    "when": "thirty days have passed since creation"
+  }
+]

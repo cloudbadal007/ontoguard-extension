@@ -1,0 +1,194 @@
+# OntoGuard for VS Code
+
+**Catch conflicting business rules before an AI agent (or a human) acts on them.**
+
+OntoGuard is a small VS Code / Cursor extension. You write your rules in a simple file, run a command, and it tells you — in plain English — when those rules fight each other or never really end.
+
+It runs **on your machine**. No account. No cloud. No API key.
+
+---
+
+## Why this is needed
+
+Teams write policies like:
+
+- “If the claim is eligible, it **must** be approved.”
+- “If the claim is on fraud hold, it **must not** be approved.”
+
+Both can be true for the **same** case. A person might notice. An AI agent often will not — it may approve anyway.
+
+Other rules say “keep paying **until** X,” but nothing else ever triggers when X happens. The duty quietly continues.
+
+Those mistakes show up late: wrong payments, compliance reviews, angry audits. OntoGuard surfaces them **while you are still editing the rules**.
+
+---
+
+## How it helps
+
+| Problem | What OntoGuard does |
+|---------|---------------------|
+| Two rules say MUST and MUST NOT for the same thing | Flags a **direct contradiction** |
+| A rule has an end date/condition, but nothing matches it | Flags a **temporal leak** (“this duty may not actually end”) |
+| SHACL shapes + data that break a constraint | Flags a **SHACL violation** with the rule’s message |
+
+Results appear in:
+
+1. The **Problems** panel (squiggles / errors)
+2. The **Output** panel → choose **OntoGuard**
+
+> **Honest limit:** this is a structural / SHACL checker — a fast safety net. It is **not** a full mathematical prover (no cvc5/z3). It catches the common, high-cost mistakes early.
+
+---
+
+## What input you need
+
+You can use **either** of these (or both).
+
+### Option A — Policy file (easiest)
+
+Create a JSON file whose name ends with `.policies.json`  
+(example: `eligibility.policies.json`).
+
+Each policy is one object with these fields:
+
+| Field | Required? | Meaning | Example |
+|-------|-----------|---------|---------|
+| `id` | Yes | Unique name for this rule | `"elig-1"` |
+| `kind` | Yes | `"must"` or `"must_not"` | `"must"` |
+| `subject` | Yes | Who/what the rule is about | `"the account"` |
+| `action` | Yes | What must (or must not) happen | `"be approved"` |
+| `when` | Yes | Trigger condition (plain text) | `"flagged for fraud review"` |
+| `until` | No | When the duty should end | `"seven years have passed"` |
+
+**Minimal example:**
+
+```json
+[
+  {
+    "id": "elig-1",
+    "kind": "must",
+    "subject": "the account",
+    "action": "be approved",
+    "when": "it passes standard eligibility checks"
+  },
+  {
+    "id": "elig-2",
+    "kind": "must_not",
+    "subject": "the account",
+    "action": "be approved",
+    "when": "it is flagged for fraud review"
+  }
+]
+```
+
+Same subject + same action + opposite `kind` → **contradiction**.
+
+If you add `"until": "..."` and no other policy’s `when` matches that text → **temporal leak**.
+
+### Option B — Turtle / SHACL file
+
+Use a `.ttl` file with two sections:
+
+```turtle
+# --- SHAPES ---
+# (your SHACL shapes here)
+
+# --- DATA ---
+# (the instance / action you want to check here)
+```
+
+Or put shapes in `rules.ttl` and data in a sibling file named `rules.data.ttl` (or `data.ttl`).
+
+---
+
+## How to use it (step by step)
+
+### 1. Install dependencies and build (developers)
+
+```bash
+git clone https://github.com/cloudbadal007/ontoguard-extension.git
+cd ontoguard-extension
+npm install
+npm run compile
+```
+
+### 2. Launch the extension
+
+1. Open this folder in **VS Code** or **Cursor**.
+2. Press **F5** (or Run → **Start Debugging** → **Run OntoGuard Extension**).
+3. A new window opens — the **Extension Development Host**. Use that window for the steps below.
+
+*(Later you can install a `.vsix` package instead of F5. Same commands.)*
+
+### 3. Try a ready-made sample (recommended first)
+
+| File | What you will see |
+|------|-------------------|
+| `samples/eligibility.policies.json` | Approval vs fraud-hold **contradiction** |
+| `samples/retention.policies.json` | Retention conflict + **temporal leak** |
+| `samples/conflicting-rules.ttl` | SHACL blocks approve-under-fraud-hold |
+| `samples/duty-persists.ttl` | SHACL blocks payment after mid-period ineligibility |
+
+**Policy sample:**
+
+1. Open `samples/eligibility.policies.json`.
+2. Press `Ctrl+Shift+P` (Mac: `Cmd+Shift+P`).
+3. Run **OntoGuard: Check Policy Consistency**.
+4. Open **View → Problems** and **View → Output → OntoGuard**.
+
+**Tip:** saving any `*.policies.json` file re-runs the policy check automatically.
+
+**SHACL sample:**
+
+1. Open `samples/duty-persists.ttl`.
+2. Command Palette → **OntoGuard: Validate SHACL**.
+3. Read the violation in Problems / Output.
+
+**No file open?**
+
+1. Command Palette → **OntoGuard: Run Demo Scenario**.
+2. Pick a demo (conflicting rules, duty persists, or refund).
+3. Read the result in Output.
+
+### 4. Use it on your own rules
+
+1. Copy a sample file and edit the text to match your domain.
+2. Keep the same field names (`id`, `kind`, `subject`, `action`, `when`, optional `until`).
+3. Run the matching command again.
+
+---
+
+## Commands (cheat sheet)
+
+| Command | When to use |
+|---------|-------------|
+| **OntoGuard: Check Policy Consistency** | You have a `.policies.json` file open |
+| **OntoGuard: Validate SHACL** | You have a `.ttl` / `.owl` shapes+data file open |
+| **OntoGuard: Run Demo Scenario** | You want a one-click demo with no setup |
+| **OntoGuard: Clear Diagnostics** | Clear OntoGuard messages from Problems |
+
+You can also **right-click** in the editor:
+
+- On a `.json` file → Check Policy Consistency  
+- On a `.ttl` / `.owl` file → Validate SHACL  
+
+---
+
+## What it does *not* do
+
+- It does **not** replace legal review or a formal proof engine.
+- It does **not** understand every nuance of natural language — it matches structure (same subject/action, matching `until`/`when` text, SHACL constraints).
+- It does **not** send your files anywhere.
+
+---
+
+## Related projects
+
+- [ontoguard-ai](https://github.com/cloudbadal007/ontoguard-ai) — semantic firewall for AI agents (OWL/SHACL before execution)
+- [policy-consistency-checker](https://github.com/cloudbadal007/policy-consistency-checker) — browser version of the policy checks
+
+---
+
+## License
+
+See repository license (or add one when you publish). For now this is a local POC under your [GitHub account](https://github.com/cloudbadal007).

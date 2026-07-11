@@ -1,0 +1,87 @@
+{
+  "name": "ontoguard-extension",
+  "displayName": "OntoGuard",
+  "description": "Detect contradictory rules and unmatched temporal end-conditions in OWL/SHACL and policy sets.",
+  "version": "0.1.0",
+  "publisher": "cloudbadal007",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:turtle",
+    "onLanguage:json"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ontoguard.checkPolicies",
+        "title": "OntoGuard: Check Policy Consistency"
+      },
+      {
+        "command": "ontoguard.validateShacl",
+        "title": "OntoGuard: Validate SHACL (shapes + data)"
+      },
+      {
+        "command": "ontoguard.runDemo",
+        "title": "OntoGuard: Run Demo Scenario"
+      },
+      {
+        "command": "ontoguard.clearDiagnostics",
+        "title": "OntoGuard: Clear Diagnostics"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ontoguard.checkPolicies",
+          "when": "resourceExtname == .json",
+          "group": "ontoguard@1"
+        },
+        {
+          "command": "ontoguard.validateShacl",
+          "when": "resourceExtname == .ttl || resourceExtname == .owl",
+          "group": "ontoguard@1"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "turtle",
+        "aliases": [
+          "Turtle",
+          "RDF Turtle"
+        ],
+        "extensions": [
+          ".ttl",
+          ".turtle"
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "vitest run",
+    "package": "vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@rdfjs/data-model": "^2.1.0",
+    "@rdfjs/dataset": "^2.0.2",
+    "n3": "^1.25.2",
+    "rdf-validate-shacl": "^0.6.5"
+  },
+  "devDependencies": {
+    "@rdfjs/types": "^2.0.1",
+    "@types/n3": "^1.24.2",
+    "@types/node": "^22.9.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.6.3",
+    "vitest": "^3.0.5"
+  }
+}

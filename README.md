@@ -8,6 +8,17 @@ It runs **on your machine**. No account. No cloud. No API key.
 
 ---
 
+## Related links
+
+- 📝 Medium — how the underlying firewall was built in 48 hours with Cursor AI: https://medium.com/towards-artificial-intelligence/ontoguard-i-built-an-ontology-firewall-for-ai-agents-in-48-hours-using-cursor-ai-be4208c405e7
+- 🧠 ontoguard-ai — the semantic firewall this extension previews, for AI agents acting in production: https://github.com/cloudbadal007/ontoguard-ai
+- 🌐 policy-consistency-checker — browser version of the same policy checks: https://github.com/cloudbadal007/policy-consistency-checker
+- 🎥 Earlier OntoGuard videos:
+  - https://youtu.be/s32Ds_Kq9Ps
+  - https://youtu.be/1KKKHRBjBFQ
+
+---
+
 ## Why this is needed
 
 Teams write policies like:
@@ -179,13 +190,6 @@ You can also **right-click** in the editor:
 - It does **not** replace legal review or a formal proof engine.
 - It does **not** understand every nuance of natural language — it matches structure (same subject/action, matching `until`/`when` text, SHACL constraints).
 - It does **not** send your files anywhere.
-
----
-
-## Related projects
-
-- [ontoguard-ai](https://github.com/cloudbadal007/ontoguard-ai) — semantic firewall for AI agents (OWL/SHACL before execution)
-- [policy-consistency-checker](https://github.com/cloudbadal007/policy-consistency-checker) — browser version of the policy checks
 
 ---
 

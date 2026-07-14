@@ -4,6 +4,11 @@
   "description": "Detect contradictory rules and unmatched temporal end-conditions in OWL/SHACL and policy sets.",
   "version": "0.1.0",
   "publisher": "cloudbadal007",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudbadal007/ontoguard-extension.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -68,7 +73,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "vitest run",
-    "package": "vsce package --no-dependencies"
+    "package": "vsce package"
   },
   "dependencies": {
     "@rdfjs/data-model": "^2.1.0",

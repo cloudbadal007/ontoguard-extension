@@ -195,4 +195,6 @@ You can also **right-click** in the editor:
 
 ## License
 
-See repository license (or add one when you publish). For now this is a local POC under your [GitHub account](https://github.com/cloudbadal007).
+This project is **open source** under the [MIT License](LICENSE).
+
+You are free to use, copy, modify, and distribute it — including commercially — as long as you keep the copyright and license notice.

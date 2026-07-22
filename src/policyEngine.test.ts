@@ -12,16 +12,16 @@ describe("findDirectContradictions", () => {
       {
         id: "a",
         kind: "must",
-        subject: "the account",
-        action: "be approved",
-        when: "eligible",
+        subject: "the claim",
+        action: "be paid",
+        when: "coverage confirmed",
       },
       {
         id: "b",
         kind: "must_not",
-        subject: "the account",
-        action: "be approved",
-        when: "flagged",
+        subject: "the claim",
+        action: "be paid",
+        when: "SIU hold",
       },
     ]);
 
@@ -36,17 +36,17 @@ describe("findTemporalLeaks", () => {
       {
         id: "a",
         kind: "must",
-        subject: "records",
-        action: "be kept",
-        when: "created",
-        until: "retention period ends",
+        subject: "the policy",
+        action: "remain in force",
+        when: "premiums are current",
+        until: "the waiting period ends",
       },
       {
         id: "b",
         kind: "must",
-        subject: "records",
-        action: "be archived",
-        when: "storage is full",
+        subject: "the policy",
+        action: "be reviewed",
+        when: "a claim is filed",
       },
     ]);
 
@@ -56,21 +56,21 @@ describe("findTemporalLeaks", () => {
 });
 
 describe("checkPolicies", () => {
-  it("detects eligibility contradiction from sample JSON", () => {
+  it("detects claims/SIU contradiction from sample JSON", () => {
     const policies = parsePoliciesJson(`[
       {
-        "id": "elig-1",
+        "id": "uw-1",
         "kind": "must",
-        "subject": "the account",
-        "action": "be approved",
-        "when": "eligible"
+        "subject": "the claim",
+        "action": "be paid",
+        "when": "coverage confirmed"
       },
       {
-        "id": "elig-2",
+        "id": "uw-2",
         "kind": "must_not",
-        "subject": "the account",
-        "action": "be approved",
-        "when": "fraud hold"
+        "subject": "the claim",
+        "action": "be paid",
+        "when": "SIU hold"
       }
     ]`);
 

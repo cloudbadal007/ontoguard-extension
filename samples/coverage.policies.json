@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cov-1",
+    "kind": "must",
+    "subject": "the policy",
+    "action": "remain in force",
+    "when": "premiums are current",
+    "until": "the waiting period ends"
+  },
+  {
+    "id": "cov-2",
+    "kind": "must_not",
+    "subject": "the policy",
+    "action": "remain in force",
+    "when": "the grace period has expired without reinstatement"
+  },
+  {
+    "id": "cov-3",
+    "kind": "must",
+    "subject": "the policy",
+    "action": "be cancelled",
+    "when": "the grace period has expired without reinstatement"
+  }
+]

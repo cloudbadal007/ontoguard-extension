@@ -23,12 +23,12 @@ It runs **on your machine**. No account. No cloud. No API key.
 
 Teams write policies like:
 
-- “If the claim is eligible, it **must** be approved.”
-- “If the claim is on fraud hold, it **must not** be approved.”
+- “If coverage is confirmed, the claim **must** be paid.”
+- “If SIU has an open investigation, the claim **must not** be paid.”
 
-Both can be true for the **same** case. A person might notice. An AI agent often will not — it may approve anyway.
+Both can be true for the **same** case. A person might notice. An AI agent often will not — it may pay anyway.
 
-Other rules say “keep paying **until** X,” but nothing else ever triggers when X happens. The duty quietly continues.
+Other rules say “keep coverage in force **until** the waiting period ends,” but nothing else ever triggers when that happens. The duty quietly continues.
 
 Those mistakes show up late: wrong payments, compliance reviews, angry audits. OntoGuard surfaces them **while you are still editing the rules**.
 
@@ -58,36 +58,36 @@ You can use **either** of these (or both).
 ### Option A — Policy file (easiest)
 
 Create a JSON file whose name ends with `.policies.json`  
-(example: `eligibility.policies.json`).
+(example: `underwriting.policies.json`).
 
 Each policy is one object with these fields:
 
 | Field | Required? | Meaning | Example |
 |-------|-----------|---------|---------|
-| `id` | Yes | Unique name for this rule | `"elig-1"` |
+| `id` | Yes | Unique name for this rule | `"uw-1"` |
 | `kind` | Yes | `"must"` or `"must_not"` | `"must"` |
-| `subject` | Yes | Who/what the rule is about | `"the account"` |
-| `action` | Yes | What must (or must not) happen | `"be approved"` |
-| `when` | Yes | Trigger condition (plain text) | `"flagged for fraud review"` |
-| `until` | No | When the duty should end | `"seven years have passed"` |
+| `subject` | Yes | Who/what the rule is about | `"the claim"` |
+| `action` | Yes | What must (or must not) happen | `"be paid"` |
+| `when` | Yes | Trigger condition (plain text) | `"SIU has an open investigation"` |
+| `until` | No | When the duty should end | `"the waiting period ends"` |
 
 **Minimal example:**
 
 ```json
 [
   {
-    "id": "elig-1",
+    "id": "uw-1",
     "kind": "must",
-    "subject": "the account",
-    "action": "be approved",
-    "when": "it passes standard eligibility checks"
+    "subject": "the claim",
+    "action": "be paid",
+    "when": "coverage is confirmed under the policy terms"
   },
   {
-    "id": "elig-2",
+    "id": "uw-2",
     "kind": "must_not",
-    "subject": "the account",
-    "action": "be approved",
-    "when": "it is flagged for fraud review"
+    "subject": "the claim",
+    "action": "be paid",
+    "when": "SIU has an open investigation"
   }
 ]
 ```
@@ -135,14 +135,14 @@ npm run compile
 
 | File | What you will see |
 |------|-------------------|
-| `samples/eligibility.policies.json` | Approval vs fraud-hold **contradiction** |
-| `samples/retention.policies.json` | Retention conflict + **temporal leak** |
-| `samples/conflicting-rules.ttl` | SHACL blocks approve-under-fraud-hold |
-| `samples/duty-persists.ttl` | SHACL blocks payment after mid-period ineligibility |
+| `samples/underwriting.policies.json` | Covered claim vs SIU hold **contradiction** |
+| `samples/coverage.policies.json` | Coverage/waiting-period conflict + **temporal leak** |
+| `samples/conflicting-rules.ttl` | SHACL blocks pay-under-SIU-hold |
+| `samples/duty-persists.ttl` | SHACL blocks benefit payment after mid-period lapse |
 
 **Policy sample:**
 
-1. Open `samples/eligibility.policies.json`.
+1. Open `samples/underwriting.policies.json`.
 2. Press `Ctrl+Shift+P` (Mac: `Cmd+Shift+P`).
 3. Run **OntoGuard: Check Policy Consistency**.
 4. Open **View → Problems** and **View → Output → OntoGuard**.
@@ -158,7 +158,7 @@ npm run compile
 **No file open?**
 
 1. Command Palette → **OntoGuard: Run Demo Scenario**.
-2. Pick a demo (conflicting rules, duty persists, or refund).
+2. Pick a demo (covered vs SIU, benefit that won't stop, or premium refund).
 3. Read the result in Output.
 
 ### 4. Use it on your own rules

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "uw-1",
+    "kind": "must",
+    "subject": "the claim",
+    "action": "be paid",
+    "when": "coverage is confirmed under the policy terms"
+  },
+  {
+    "id": "uw-2",
+    "kind": "must_not",
+    "subject": "the claim",
+    "action": "be paid",
+    "when": "SIU has an open investigation"
+  },
+  {
+    "id": "uw-3",
+    "kind": "must",
+    "subject": "the claim",
+    "action": "be held for investigation",
+    "when": "SIU has an open investigation"
+  }
+]

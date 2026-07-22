@@ -1,57 +1,57 @@
 # --- SHAPES ---
-@prefix ex: <http://example.org/payments#> .
+@prefix ex: <http://example.org/insurance#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:MidPeriodIneligibleClaimant a sh:NodeShape ;
-  sh:property [
-    sh:path ex:eligibilityEnded ;
-    sh:hasValue true ;
-  ] ;
-  sh:property [
-    sh:path ex:periodEnded ;
-    sh:hasValue false ;
-  ] .
+ex:MidPeriodLapsedPolicy a sh:NodeShape ;
+    sh:property [
+        sh:path ex:coverageLapsed ;
+        sh:hasValue true ;
+    ] ;
+    sh:property [
+        sh:path ex:benefitPeriodEnded ;
+        sh:hasValue false ;
+    ] .
 
-ex:PaymentActionShape a sh:NodeShape ;
-  sh:targetClass ex:PaymentAction ;
-  sh:property [
-    sh:path ex:subjectDuty ;
-    sh:minCount 1 ;
-    sh:node ex:DutySafeToPay ;
-    sh:message "Payment duty still marked active for a period after eligibility ended on day 12. Flagging before payment is sent." ;
-  ] .
+ex:BenefitPaymentActionShape a sh:NodeShape ;
+    sh:targetClass ex:BenefitPaymentAction ;
+    sh:property [
+        sh:path ex:subjectDuty ;
+        sh:minCount 1 ;
+        sh:node ex:DutySafeToPay ;
+        sh:message "Benefit duty still marked active after coverage lapsed on day 12 of the benefit period. Flagging before payment is sent." ;
+    ] .
 
 ex:DutySafeToPay a sh:NodeShape ;
-  sh:not [
-    sh:and [
-      sh:property [
-        sh:path ex:dutyStatus ;
-        sh:hasValue "active" ;
-      ] ;
-      sh:property [
-        sh:path ex:claimant ;
-        sh:minCount 1 ;
-        sh:node ex:MidPeriodIneligibleClaimant ;
-      ] ;
-    ]
-  ] ;
-  sh:message "Payment duty still marked active for a period after eligibility ended on day 12. Flagging before payment is sent." .
+    sh:not [
+        sh:and [
+            sh:property [
+                sh:path ex:dutyStatus ;
+                sh:hasValue "active" ;
+            ] ;
+            sh:property [
+                sh:path ex:policy ;
+                sh:minCount 1 ;
+                sh:node ex:MidPeriodLapsedPolicy ;
+            ] ;
+        ]
+    ] ;
+    sh:message "Benefit duty still marked active after coverage lapsed on day 12 of the benefit period. Flagging before payment is sent." .
 
 # --- DATA ---
-@prefix ex: <http://example.org/payments#> .
+@prefix ex: <http://example.org/insurance#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:pay2291 a ex:PaymentAction ;
-  ex:subjectDuty ex:duty2291 .
+ex:pay2291 a ex:BenefitPaymentAction ;
+    ex:subjectDuty ex:duty2291 .
 
-ex:duty2291 a ex:PaymentDuty ;
-  ex:dutyStatus "active" ;
-  ex:claimant ex:claimant2291 .
+ex:duty2291 a ex:BenefitDuty ;
+    ex:dutyStatus "active" ;
+    ex:policy ex:policy2291 .
 
-ex:claimant2291 a ex:Claimant ;
-  ex:claimId "JD-2291" ;
-  ex:eligibilityEndDay 12 ;
-  ex:periodLengthDays 30 ;
-  ex:eligibilityEnded true ;
-  ex:periodEnded false .
+ex:policy2291 a ex:Policy ;
+    ex:policyId "PL-2291" ;
+    ex:coverageLapseDay 12 ;
+    ex:benefitPeriodDays 30 ;
+    ex:coverageLapsed true ;
+    ex:benefitPeriodEnded false .

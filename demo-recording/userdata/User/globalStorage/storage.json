@@ -1,0 +1,44 @@
+{
+    "telemetry.macMachineId": "6e3c4d630fba9c6fcb544f555390fdbf20448c6ad74aba2686964c07b0b0ac88",
+    "telemetry.machineId": "1f8395b6f6795c2dc9e1dd2bca6d864e9d1d41cbddf0b00ba8ba1e73b606b824",
+    "telemetry.sqmId": "{1A6507F8-1ACD-4122-8529-67ECE93A2531}",
+    "telemetry.devDeviceId": "022259e6-04ac-4c9a-af1a-f836e063e6d1",
+    "backupWorkspaces": {
+        "workspaces": [],
+        "folders": [],
+        "emptyWindows": []
+    },
+    "windowControlHeight": 35,
+    "theme": "vs",
+    "themeBackground": "#fcfcfc",
+    "windowSplash": {
+        "zoomLevel": 0,
+        "baseTheme": "vs",
+        "colorInfo": {
+            "foreground": "#141414",
+            "background": "#fcfcfc",
+            "editorBackground": "#fcfcfc",
+            "titleBarBackground": "#f3f3f3",
+            "titleBarBorder": "rgba(20, 20, 20, 0.08)",
+            "activityBarBackground": "#f3f3f3",
+            "sideBarBackground": "#f3f3f3",
+            "sideBarBorder": "rgba(20, 20, 20, 0.08)",
+            "statusBarBackground": "#f3f3f3",
+            "statusBarBorder": "rgba(20, 20, 20, 0.08)",
+            "statusBarNoFolderBackground": "#f3f3f3"
+        }
+    },
+    "windowsState": {
+        "lastPluginDevelopmentHostWindow": {
+            "folder": "file:///d%3A/SriGanesh/Projects/ontoguard-extension/samples",
+            "uiState": {
+                "mode": 0,
+                "x": 1740,
+                "y": 140,
+                "width": 667,
+                "height": 533
+            }
+        },
+        "openedWindows": []
+    }
+}
